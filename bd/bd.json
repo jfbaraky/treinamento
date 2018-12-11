@@ -1,0 +1,11 @@
+{
+  "posts": [
+    {
+      "likes": 3,
+      "title": "Novo post",
+      "text": "asdasdasd",
+      "time": 1544468782495,
+      "id": 1
+    }
+  ]
+}

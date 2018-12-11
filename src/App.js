@@ -1,87 +1,36 @@
 import React, {Component} from 'react';
-import Post from './components/post';
-import CreatePost from './components/createPost';
+import {Route, BrowserRouter, Switch} from 'react-router-dom';
 
-const postArray = [
-    // {
-    //     title: 'Titulo do post 1',
-    //     time: '12:29',
-    //     text: 'Esse é o texto do primeiro post'
-    // },
-    // {
-    //     title: 'Titulo do post 2',
-    //     time: '12:29',
-    //     text: 'Esse é o texto do segundo post'
-    // },
-    // {
-    //     title: 'Titulo do post 3',
-    //     time: '12:29',
-    //     text: 'Esse é o texto do terceiro post'
-    // }
-];
+import PostView from './components/postView';
+import NotFoundView from './components/notFoundView';
+import PostDetails from "./components/postDetails";
+import moment from 'moment';
 
 class App extends Component {
-    constructor(){
-        super();
-        this.state={
-            postArray: []
-        }
-    }
-
-    componentWillMount(){
-        console.log('COMPONENT WILL MOUNT');
-    }
-    componentDidMount(){
-        console.log('COMPONENT DID MOUNT');
-        const newState = {
-            postArray: postArray
-        };
-        this.setState(newState);
-        this.readFromStorage(); // Load from storage
-    }
-
-    saveInStorage(){
-        const postArray = this.state.postArray;
-        localStorage.setItem('posts', JSON.stringify(postArray));
-    }
-
-    readFromStorage(){
-        let postSaved = localStorage.getItem('posts');
-        postSaved = JSON.parse(postSaved);
-
-        this.setState({postArray: postSaved  || []});
-    }
-
-    onSubmitPost(postObject){
-        let postArray = this.state.postArray;
-
-        // Adicionando um tempo no post
-        postObject.time = new Date().getTime();
-        postArray.push(postObject);
-
-        this.setState({postArray: postArray});
-        this.saveInStorage();  // Save to storage
-    }
-
   render(){
-      const postArray = this.state.postArray.sort((a,b) => b.time - a.time);
+      const userIsLogged = true;
+        if(userIsLogged){
+            return(
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path='/post/:id' component={PostDetails}/>
+                        <Route exact path='/' component={PostView}/>
+                        <Route path='*' component={NotFoundView} />
+                        }/>
+                    </Switch>
+                </BrowserRouter>
+            );
+        } else {
+            return(
+                <BrowserRouter>
+                    <Switch>
+                        <Route  path='*' component={() => <div> Faça o login</div>}/>
+                        }/>
+                    </Switch>
+                </BrowserRouter>
+            );
+        }
 
-      return(
-      <div>
-          <CreatePost title={"Postar algo novo"} onSubmit={this.onSubmitPost.bind(this)}/>
-          {
-              postArray.map((post, index) => {
-                return(
-                    <Post key={index}
-                        title={post.title}
-                          time={post.time}>
-                        {post.text}
-                    </Post>
-                )
-              })
-          }
-      </div>
-    );
   }
 }
 

@@ -1,4 +1,13 @@
 import React, {Component} from 'react';
+import {Button,
+    Card,
+    CardContent,
+    Typography,
+    CardActions,
+    IconButton,
+    Input,
+    Grid
+} from '@material-ui/core';
 
 class CreatePost extends Component {
     constructor(){
@@ -18,24 +27,27 @@ class CreatePost extends Component {
     render(){
         console.log(this.state);
         return(
-            <div style={styles}>
+            <Card style={styles}>
                 <h2>{this.props.title}</h2>
-                <input value={this.state.title}
+                <Input  fullWidth
+                    value={this.state.title}
                        onChange={(event) => this.onChange(event, 'title')}
                        type={'text'}
                        placeholder={'Titulo'}/>
                 <br/>
-                <textarea value={this.state.text}
+                <Input multiline
+                       fullWidth
+                    value={this.state.text}
                           onChange={(event) => this.onChange(event, 'text')}
                           placeholder={'Texto do post'}/>
                 <br/>
-                <button onClick={()=> {
+                <Button onClick={()=> {
                     this.setState({title: '', text: ''})
                     this.props.onSubmit(this.state)
                 }}>
                     Postar
-                </button>
-            </div>
+                </Button>
+            </Card>
         );
     }
 }
